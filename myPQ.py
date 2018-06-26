@@ -27,12 +27,36 @@ class myPriorityQueue:
                 return
         else:
             return
-        
+    
+    def left_swap(self, csr):
+       #swap entry in csr w/ csr's left child
+       tmp = self.queue[csr]
+       self.queue[csr] = self.queue[2*csr+1]
+       
+       
     def min(self):
         return self.queue[0]
     
     def _find_min(self):
-        return
+        return 0
+    
+    
+    def _pop_remove(self):
+        #get rid of the first entry in the list
+        csr = 0
+        while(2*csr+1 <= self.ptr):
+            if(ptr == 2*csr +1):
+                if(self.queue[csr]>self.queue[2*csr+1]):
+                    
+            if(self.queue[2*csr+1]<self.queue[2*csr+2]):
+                self[csr]
+        
+    
+    
+    
+    def pop(self):
+        ret = self.queue[0]
+        self._pop_remove()
         
         
         
