@@ -5,6 +5,33 @@ class maxHeap:
     
     queue = []
     
+    def insert(self,key):
+        self.queue.append(key)
+        if len(self.queue) != 1:
+            self.upFix(len(self.queue)-1)
+        return
+
+    def delete(self,idx=0):
+        if len(self.queue) != 1:
+            tok = self.queue.pop()
+            self.queue[idx] = tok
+            self.maxHeapify(idx)
+        else:
+            self.queue = []
+        return
+
+
+    def upFix(self,idx):
+        if idx != 0:
+            if self.queue[idx] > self.queue[self.parDx(idx)]:
+                self.queue[idx],self.queue[self.parDx(idx)] = self.queue[self.parDx(idx)],self.queue[idx]
+                self.upFix(self.parDx(idx))
+        return
+    
+    def parDx(self,idx):
+        return (idx-1)//2
+
+
     def __init__(self, feed =[]):
         #find max_idx of the non-leaf node
         self.queue = feed
@@ -35,14 +62,15 @@ class maxHeap:
             else:
                 return
         else:
-            if(self.queue[2*idx+1] >= self.queue[2*idx+2])and(self.queue[2*idx+1]>self.queue[idx]):
-                self.swap_left(idx)
-                self.maxHeapify(2*idx+1)
-            elif(self.queue[2*idx+1] < self.queue[2*idx+2])and(self.queue[2*idx+2]>self.queue[idx]):
-                self.swap_right(idx)
-                self.maxHeapify(2*idx+2)
-                
-                
+            try:
+                if(self.queue[2*idx+1] >= self.queue[2*idx+2])and(self.queue[2*idx+1]>self.queue[idx]):
+                    self.swap_left(idx)
+                    self.maxHeapify(2*idx+1)
+                elif(self.queue[2*idx+1] < self.queue[2*idx+2])and(self.queue[2*idx+2]>self.queue[idx]):
+                    self.swap_right(idx)
+                    self.maxHeapify(2*idx+2)
+            except TypeError:        
+                print(idx)
                 
 def heightHeap(nodeNum):
     #3-node tree w/ height 2
@@ -120,13 +148,31 @@ def buildHeapTester():
     alice = maxHeap(lind)
     printHeap(alice.queue)
 
-     
-    
+def insertionTester():
+    pool = rdListGen()
+    hotPot = maxHeap([])
+    for ele in pool:
+        hotPot.insert(ele)
+    printHeap(hotPot.queue)
+
+def deletionTester():
+    pool = rdListGen()
+    hotPot = maxHeap([])
+    for ele in pool:
+        hotPot.insert(ele)
+    printHeap(hotPot.queue)
+    hotPot.delete()
+    printHeap(hotPot.queue)
+    print("DONE")
+
+
+
 #maxHeapify_Tester()
 #printHeap()
 #trial5()
 #printHeapTester()
 #maxHeapify_Tester()
-buildHeapTester()
-
+#insertionTester()
+#buildHeapTester()
+deletionTester()
 
