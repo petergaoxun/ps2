@@ -1,12 +1,18 @@
 import random
 import math
-from spyder.widgets.ipythonconsole.client import BLANK
+
 class maxHeap:
     
     queue = []
     
     def __init__(self, feed =[]):
+        #find max_idx of the non-leaf node
         self.queue = feed
+        if len(feed) != 0 :
+            height = heightHeap(len(feed))
+            first = (int) (math.pow(2, height-1))-1
+            for j in range(first,-1,-1):
+                self.maxHeapify(j)
     
     def swap_left(self,idx):
         tmp = self.queue[idx]
@@ -29,14 +35,17 @@ class maxHeap:
             else:
                 return
         else:
-            if(self.queue[2*idx+1] > self.queue[2*idx+2]):
+            if(self.queue[2*idx+1] >= self.queue[2*idx+2])and(self.queue[2*idx+1]>self.queue[idx]):
                 self.swap_left(idx)
                 self.maxHeapify(2*idx+1)
-            else:
+            elif(self.queue[2*idx+1] < self.queue[2*idx+2])and(self.queue[2*idx+2]>self.queue[idx]):
                 self.swap_right(idx)
                 self.maxHeapify(2*idx+2)
                 
+                
+                
 def heightHeap(nodeNum):
+    #3-node tree w/ height 2
     return math.ceil(math.log((nodeNum+1),2))
     
 def rdListGen(size = 10):
@@ -46,10 +55,12 @@ def rdListGen(size = 10):
     return ret
     
 def maxHeapify_Tester():
-    tia = rdListGen()
-    for x in range(len(tia), 0, -1):
-        print(x)
-
+    #tia = rdListGen()
+    lind = [96,7,49,25,17,33,40,8]
+    myCase = maxHeap(lind)
+    myCase.maxHeapify(1)
+    printHeap(myCase.queue)
+    #print("punch")
 
 
 
@@ -103,33 +114,19 @@ def printHeapTester():
     print(" ")
     printHeap(pool)
         
-        
-def trial():
-    for x in range(10):
-        print(x)
+def buildHeapTester():
+    lind = rdListGen(20)
+    print(lind)
+    alice = maxHeap(lind)
+    printHeap(alice.queue)
 
-def trial2():
-    x = 25
-    print(len(str(x)))
-
-def trial3():
-    beat = "b"
-    beats = beat*0
-    print(beats)
-
-def trial5():
-    beam = " "
-    print(str(beam))
-    print(len(str(beam)))
-    print("ok")
-
-def trial4():
-    pool = ["alice","kuma","john"]
-    for jim in pool:
-        print(jim, sep='' , end ='')
+     
     
 #maxHeapify_Tester()
 #printHeap()
 #trial5()
+#printHeapTester()
+#maxHeapify_Tester()
+buildHeapTester()
 
-printHeapTester()
+
