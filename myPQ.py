@@ -1,64 +1,104 @@
 import circuit
+import math
+from maxHeap import rdListGen,printHeap,printableNode
 
 class myPriorityQueue:
-    def __init__(self):
-        self.queue = []
-        self.ptr = 0
+
+    def height(self):
+        nodeNum = len(self.queue)
+        rawHeight = math.log(nodeNum+1,2)
+        acutal = math.ceil(rawHeight)
+        return acutal
     
-    def append(self,key):
-        if key is None:
-            raise ValueError("can not insert None in the queue")
-        self.queue[self.ptr] = key
-        key = key+1
-        self._fixUpQ()
-    
-    
-    def _fixUpQ(self, target = None):
-        #the last entry in the queue might have a violation
-        if target == None:
-            target = self.ptr -1
-        if target != 0 :
-            par = (target-1)//2
-            if self.queue[par] > self.queue[target]:
-                tmp = self.queue[target]
-                self.queue[target] = self.queue[par]
-                self.queue[par] = tmp
-                self._fixUpQ(par)
+    def delete(self,idx=0):
+        if len(self.queue) != 1:
+            tok = self.queue.pop()
+            self.queue[idx] = tok
+            self.minHeapify(idx)
+        else:
+            self.queue = []
+        return
+
+    def parDx(self,idx):
+        return (idx-1)//2
+
+    def __init__(self, dome=[]):
+            self.queue = dome
+            if len(dome) == 0:
+                return
+            else:
+                #proc raw list from max_idx non-leaf node to root
+                capIdx = (int) (math.pow(2,self.height()-1) - 1)
+                for j in range(capIdx,-1,-1):
+                    self.minHeapify(j)
+
+    def minHeapify(self,idx):
+        #assume the queue[idx] is the only node with violation
+        if((len(self.queue)-1) < (2*idx+1)):
+            return
+        elif ((len(self.queue)-1) == (2*idx+1)):
+            if self.queue[2*idx+1]> self.queue[idx]:
+                    self.swap_left(idx)
+            else:
                 return
         else:
-            return
-    
-    def left_swap(self, csr):
-       #swap entry in csr w/ csr's left child
-       tmp = self.queue[csr]
-       self.queue[csr] = self.queue[2*csr+1]
-       
-       
-    def min(self):
-        return self.queue[0]
-    
-    def _find_min(self):
-        return 0
-    
-    
-    def _pop_remove(self):
-        #get rid of the first entry in the list
-        csr = 0
-        while(2*csr+1 <= self.ptr):
-            if(ptr == 2*csr +1):
-                if(self.queue[csr]>self.queue[2*csr+1]):
-                    
-            if(self.queue[2*csr+1]<self.queue[2*csr+2]):
-                self[csr]
-        
-    
-    
-    
-    def pop(self):
-        ret = self.queue[0]
-        self._pop_remove()
+            if(self.queue[2*idx+1] >= self.queue[2*idx+2])and(self.queue[2*idx+1]<self.queue[idx]):
+                self.swap_right(idx)
+                self.minHeapify(2*idx+2)
+            elif(self.queue[2*idx+1] < self.queue[2*idx+2])and(self.queue[2*idx+2]<self.queue[idx]):
+                self.swap_left(idx)
+                self.minHeapify(2*idx+1)
+            
+
+    def swap_left(self,idx):
+        tmp = self.queue[idx]
+        self.queue[idx] = self.queue[2*idx+1]
+        self.queue[2*idx+1] = tmp
         
         
-        
-        
-    
+    def swap_right(self,idx):
+        tmp = self.queue[idx]
+        self.queue[idx] = self.queue[2*idx+2]
+        self.queue[2*idx+2] = tmp
+
+    def insert(self,key):
+        self.queue.append(key)
+        if len(self.queue) != 1:
+            self.upFix(len(self.queue)-1)
+        return
+
+    def upFix(self,idx):
+        if idx != 0:
+            if self.queue[idx] < self.queue[self.parDx(idx)]:
+                self.queue[idx],self.queue[self.parDx(idx)] = self.queue[self.parDx(idx)],self.queue[idx]
+                self.upFix(self.parDx(idx))
+        return
+
+def insertionTester():
+    pool = rdListGen()
+    hotPot = myPriorityQueue([])
+    for ele in pool:
+        hotPot.insert(ele)
+    printHeap(hotPot.queue)
+
+
+def buildHeapTester():
+    lind = rdListGen(20)
+    print(lind)
+    alice = myPriorityQueue(lind)
+    printHeap(alice.queue)
+
+def deletionTester():
+    pool = rdListGen()
+    hotPot = myPriorityQueue([])
+    for ele in pool:
+        hotPot.insert(ele)
+    printHeap(hotPot.queue)
+    hotPot.delete()
+    printHeap(hotPot.queue)
+    print("DONE")
+
+if __name__ == "__main__":
+    #buildHeapTester()
+    #insertionTester()
+    deletionTester()

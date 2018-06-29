@@ -3,8 +3,6 @@ import math
 
 class maxHeap:
     
-    queue = []
-    
     def insert(self,key):
         self.queue.append(key)
         if len(self.queue) != 1:
